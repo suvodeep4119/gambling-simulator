@@ -2,6 +2,10 @@
 
 echo "Welcome to THE GAMBLING SIMULATOR"
 
+#DICTIONARY
+declare -A maximumWon
+declare -A maximumLost
+
 #CONSTANTS
 STAKE=100
 BET=1
@@ -68,12 +72,14 @@ function reachLimitMessage()
         echo "Daily Cash remaining for the day: $dailyCash"
         echo "You LOST for the day"
         ((daysLost++))
+        maximumLost[$day]="$dailyLostBetCounter"
         
     else    
         echo "You reached maximum"
         echo "Daily Cash remaining for the day: $dailyCash"
         echo "You Won for the day"
         ((daysWon++))
+        maximumWon[$day]="$dailyWonBetCounter"
     fi
 
     echo "Amount Lost for the day: $dailyLostBetCounter"
@@ -105,9 +111,27 @@ function periodicPlay()
     fi
 
     echo "Days Won: $daysWon by Amount: $ $totalDailyWonBetCounter & Days Lost: $daysLost by Amount: $ $totalDailyLostBetCounter"
+    echo "Days Won : ${!maximumWon[@]} by respective amount: ${maximumWon[@]}"
+    echo "Luckiest Day: $( sortMaximumWon | head -1 )"
+    
+    echo "Days Lost: ${!maximumLost[@]} by respective amount: ${maximumLost[@]}"
+    echo "Unluckiest Day: $(sortMaximumLost | head -1)"
     
 }
-
+function sortMaximumWon()
+{
+    for k in ${!maximumWon[@]}
+    do
+        echo "$k ${maximumWon[$k]}"
+    done | sort -rn -k1
+}
+function sortMaximumLost()
+{
+    for y in ${!maximumLost[@]}
+    do
+        echo "$y ${maximumLost[$y]}"
+    done | sort -rn -y2
+}
 #5
 function play()
 {

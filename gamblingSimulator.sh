@@ -136,6 +136,12 @@ function sortMaximumLost()
 function play()
 {
     periodicPlay
+    if (( $totalDailyWonBetCounter>$totalDailyLostBetCounter ))
+    then    
+        echo "Continue PLAYING NEXT MONTH"
+    else
+        echo "STOP PLAYING"
+    fi
     
 }
 

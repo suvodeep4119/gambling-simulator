@@ -3,12 +3,12 @@
 echo "Welcome to THE GAMBLING SIMULATOR"
 
 #CONSTANTS
-STAKE=100
+STAKE=6
 BET=1
 WIN=1
-WINNING_STAKE_LIMIT=$((STAKE+(( (50*100)/100 )) ))
-LOSING_STAKE_LIMIT=$((STAKE-(( (50*100)/100 )) ))
-PLAY_PERIOD=20
+WINNING_STAKE_LIMIT=$((STAKE+(( (50*6)/100 )) ))
+LOSING_STAKE_LIMIT=$((STAKE-(( (50*6)/100 )) ))
+PLAY_PERIOD=3
 
 #DICTIONARY
 declare -A dailyWon
@@ -31,10 +31,14 @@ function placeBet()
 	if [ $winLoss -eq $WIN ]
 	then
 		((dailyCash++))
+		echo $dailyCash
 		((dailyWonAmount++))
+		echo $dailyWonAmount
 	else
 		((dailyCash--))
+		echo $dailyCash
 		((dailyLostAmount++))
+		echo "$dailyLostAmount"
 	fi
 }
 
@@ -56,6 +60,7 @@ function totalAmountWonLoss()
 
 function dailyWonLoss()
 {
+	
 	if [ $dailyWonAmount -gt $dailyLostAmount ]
 	then
 		echo "You won for the day"
@@ -72,13 +77,13 @@ function dailyWonLoss()
 #Loop for 20 days
 for (( day=1; day<=$PLAY_PERIOD; day++ ))
 do
-	#Loop for 1 day/per day
+	#Loop for 1-day/per-day
 	while (( $dailyCash > $LOSING_STAKE_LIMIT && $dailyCash < $WINNING_STAKE_LIMIT ))
 	do
 		placeBet
 	done
 	#Reflect dailyCash & daily Won/Loss Amount at day's end and post message
-	(($dailyCash))
+	echo "Daily Cash" $dailyCash
 	(($dailyWonAmount))
 	(($dailyLostAmount))
 	dailyWonLoss
@@ -86,6 +91,7 @@ do
 	dailyWon[$daysWonCounter]=$dailyWonAmount
 	lostAmountTotal=$(( $lostAmountTotal+$dailyLostAmount ))
 	dailyLoss[$daysLostCounter]=$dailyLostAmount
+	dailyCash=$STAKE
 done
 totalAmountWonLoss
 

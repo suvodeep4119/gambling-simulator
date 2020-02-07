@@ -6,9 +6,13 @@ echo "Welcome to THE GAMBLING SIMULATOR"
 STAKE=100
 BET=1
 WIN=1
+WINNING_STAKE_LIMIT=$((STAKE+(( (50*100)/100 )) ))
+LOSING_STAKE_LIMIT=$((STAKE-(( (50*100)/100 )) ))
+
 #VARIABLES
 dailyCash=$STAKE
 
+#FUNCTIONS
 function placeBet()
 {
 	winLoss=$((RANDOM%2))
@@ -21,4 +25,13 @@ function placeBet()
 		((dailyCash--))
 	fi
 }
-placeBet
+
+#MAIN
+while (( $dailyCash > $LOSING_STAKE_LIMIT && $dailyCash < WINNING_STAKE_LIMIT ))
+do
+	placeBet
+done
+
+#Reflect dailyCash at day's end and post message
+(($dailyCash)) 
+echo "You're done for the day"
